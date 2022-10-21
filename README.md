@@ -6,7 +6,7 @@ __pch.h__
 #include <afxsock.h>
 ```
     
-App::InitInstance()
+__App::InitInstance()__
 ```cpp
 if( !AfxSocketInit() )
 {
