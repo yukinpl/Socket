@@ -20,6 +20,7 @@ BEGIN_MESSAGE_MAP( CAmpDlg , CDialogEx )
 END_MESSAGE_MAP()
 ```
 
+Dlg.cpp
 ```cpp
 if( FALSE == m_socket.Connect( ipStr , port ) )
 {
