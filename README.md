@@ -38,3 +38,8 @@ LRESULT Dlg::OnTcpipReceive( WPARAM len , LPARAM socket )
 
     char const * pDat = sock->GetData() ;
 ```
+    
+```cpp
+if( false == m_socket.Send( sendMsg , msgPos ) )
+{
+```
