@@ -43,3 +43,4 @@ LRESULT Dlg::OnTcpipReceive( WPARAM len , LPARAM socket )
 if( false == m_socket.Send( sendMsg , msgPos ) )
 {
 ```
+ 
