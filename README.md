@@ -15,8 +15,8 @@ if( !AfxSocketInit() )
 ```
   
 ```cpp
-BEGIN_MESSAGE_MAP( CAmpDlg , CDialogEx )
-	ON_MESSAGE( WM_TCPIP_RECEIVED , & CAmpDlg::OnTcpipReceive ) 
+BEGIN_MESSAGE_MAP( Dlg , CDialogEx )
+	ON_MESSAGE( WM_TCPIP_RECEIVED , & Dlg::OnTcpipReceive ) 
 END_MESSAGE_MAP()
 ```
 
