@@ -13,15 +13,17 @@ if( !AfxSocketInit() )
     //Log( _T( "AfxSocketInit FAILED" ) , true ) ;
 }
 ```
-  
+
+&nbsp;&nbsp;  
+
+__Dlg.cpp__
+```cpp
 ```cpp
 BEGIN_MESSAGE_MAP( Dlg , CDialogEx )
 	ON_MESSAGE( WM_TCPIP_RECEIVED , & Dlg::OnTcpipReceive ) 
 END_MESSAGE_MAP()
 ```
-&nbsp;&nbsp;  
 
-__Dlg.cpp__
 ```cpp
 if( FALSE == m_socket.Connect( ipStr , port ) )
 {
