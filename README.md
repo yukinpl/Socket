@@ -1,7 +1,7 @@
 # Socket
 Socket on Windows 10. Written by C++
 
-pch.h
+__pch.h__
 ```cpp
 #include <afxsock.h>
 ```
@@ -20,7 +20,7 @@ BEGIN_MESSAGE_MAP( CAmpDlg , CDialogEx )
 END_MESSAGE_MAP()
 ```
 
-Dlg.cpp
+__Dlg.cpp__
 ```cpp
 if( FALSE == m_socket.Connect( ipStr , port ) )
 {
