@@ -25,20 +25,20 @@ END_MESSAGE_MAP()
 ```
 
 ```cpp
-if( FALSE == m_socket.Connect( ipStr , port ) )
-{
-    //Log( _T( "Fail to connect on " + ipStr + ":" + portStr ) , true ) ;
-    return ;
-}
-```
-  
-```cpp
 LRESULT Dlg::OnTcpipReceive( WPARAM len , LPARAM socket )
 {
     uint32_t length = ( uint32_t ) len ;
     Socket * sock = ( Socket * ) socket ;
 
     char const * pDat = sock->GetData() ;
+```
+    
+```cpp
+if( FALSE == m_socket.Connect( ipStr , port ) )
+{
+    //Log( _T( "Fail to connect on " + ipStr + ":" + portStr ) , true ) ;
+    return ;
+}
 ```
     
 ```cpp
