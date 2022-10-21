@@ -29,7 +29,7 @@ if( FALSE == m_socket.Connect( ipStr , port ) )
     return ;
 }
 ```
-&nbsp;&nbsp;  
+  
 ```cpp
 LRESULT Dlg::OnTcpipReceive( WPARAM len , LPARAM socket )
 {
