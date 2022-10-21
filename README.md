@@ -31,8 +31,8 @@ if( FALSE == m_socket.Connect( ipStr , port ) )
 ```cpp
 LRESULT CAmpDlg::OnTcpipReceive( WPARAM len , LPARAM socket )
 {
-	uint32_t length = ( uint32_t ) len ;
-	Socket * sock = ( Socket * ) socket ;
+    uint32_t length = ( uint32_t ) len ;
+    Socket * sock = ( Socket * ) socket ;
 
-	char const * pDat = sock->GetData() ;
+    char const * pDat = sock->GetData() ;
 ```
