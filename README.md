@@ -33,6 +33,13 @@ LRESULT Dlg::OnTcpipReceive( WPARAM len , LPARAM socket )
 
     char const * pDat = sock->GetData() ;
 ```
+
+```cpp
+LRESULT Dlg::OnSocketClose( WPARAM uniqueId , LPARAM socket )
+{
+	Socket * sock = ( Socket * ) socket ;
+	sock->Close() ;
+```
     
 ```cpp
 if( FALSE == m_socket.Connect( ipStr , port ) )
