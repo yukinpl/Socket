@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Socket.h"
 
+#include <exception>
+
 Socket::Socket()
 	: isConnected( false ) , isCreated( false ) 
 {
@@ -8,20 +10,31 @@ Socket::Socket()
 }
 
 
-bool Socket::Create( HWND const & hwnd )
+bool Socket::Create( HWND const & hwnd , int32_t const & uniqueId )
 {
-	isCreated =
-		( FALSE == CSocket::Create( 0 , SOCK_STREAM , nullptr ) ) ? false : true ;
+	try
+	{
+		isCreated =
+			( FALSE == CSocket::Create( 0 , SOCK_STREAM , nullptr ) ) ? false : true ;
+	}
+	catch( std::exception )
+	{
+		return isCreated ;
+	}
 
 	this->hwnd = hwnd ;
+	this->uniqueId = uniqueId ;
 
 	return isCreated ;
 }
 
 
-bool Socket::Connect( CString const & ipStr , int32_t const & port )
+bool Socket::Connect( CString const & ipStr , int32_t const & _port )
 {
-	isConnected = ( FALSE == CSocket::Connect( ipStr , port ) ) ? false : true ;
+	isConnected = ( FALSE == CSocket::Connect( ipStr , _port ) ) ? false : true ;
+
+	ip   = std::string( CW2A( ipStr ) ) ;
+	port = _port ;
 
 	return FALSE == isConnected ? false : true ;
 }
@@ -50,9 +63,13 @@ bool const & Socket::IsCreated() const
 
 void Socket::Close()
 {
-	isConnected = false ;
+	if( true == isConnected || true == isCreated )
+	{
+		isConnected = false ;
+		isCreated   = false ;
 
-	CSocket::Close() ;
+		CSocket::Close() ;
+	}
 }
 
 
@@ -76,27 +93,36 @@ void Socket::Wait( DWORD dwMillisecond ) const
 void Socket::OnReceive( int32_t errorCode )
 {
 	uint8_t buf[ MaxBufferSize ] ;
-	Receive( buf , MaxBufferSize ) ;
 
-	uint32_t pos = 0 ;
-	while( 0x7F != buf[ pos ] && pos < MaxBufferSize )
+	DWORD length ;
+	IOCtl( FIONREAD , & length ) ;
+
+	if( length > MaxBufferSize )
 	{
-		++pos ;
+		length = MaxBufferSize ;
 	}
 
-	if( pos >= MaxBufferSize )
-	{
-		return ;
-	}
+	Receive( buf , length ) ;
 
-	uint32_t len = pos + 1 ;
+	memcpy( recvBuf , buf , length ) ;
 
-	memcpy( recvBuf , buf , len ) ;
-	SendMessage( hwnd , WM_TCPIP_RECEIVED , len , ( LPARAM ) this ) ;
+	SendMessage( hwnd , WM_TCPIP_RECEIVED , length , ( LPARAM ) this ) ;
+}
+
+
+void Socket::OnClose( int32_t errorCode )
+{
+	SendMessage( hwnd , WM_TCPIP_CLOSED , uniqueId , ( LPARAM ) this ) ;
 }
 
 
 char const * Socket::GetData() const
 {
 	return recvBuf ;
+}
+
+
+int32_t const & Socket::GetUniqueId() const
+{
+	return uniqueId ;
 }

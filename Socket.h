@@ -1,9 +1,11 @@
 #pragma once
 
 #include <afxsock.h>
+#include <string>
 
 
 #define WM_TCPIP_RECEIVED   ( WM_USER + 3 ) 
+#define WM_TCPIP_CLOSED     ( WM_USER + 4 )
 
 class Socket : public CSocket
 {
@@ -20,11 +22,17 @@ private:
 
 	char recvBuf[ MaxBufferSize ] ;
 
+private:
+	std::string ip ;
+	int32_t port ;
+
+	int32_t uniqueId ;
+
 public:
 
 	Socket() ;
 
-	bool Create( HWND const & hwnd ) ;
+	bool Create( HWND const & hwnd , int32_t const & uniqueId = 0 ) ;
 	bool Connect( CString const & ipStr , int32_t const & port ) ;
 	bool Send( uint8_t const * data , int32_t const & len ) ;
 
@@ -36,6 +44,12 @@ public:
 	void Wait( DWORD dwMillisecond ) const ;
 
 	void OnReceive( int32_t errorCode ) ;
+	void OnClose( int32_t errorCode ) ;
 
 	char const * GetData() const ;
+
+	std::string GetIp() const ;
+	int32_t GetPort() const ;
+
+	int32_t const & GetUniqueId() const ;
 } ;
