@@ -21,6 +21,7 @@ __Dlg.cpp__
 ```cpp
 BEGIN_MESSAGE_MAP( Dlg , CDialogEx )
 	ON_MESSAGE( WM_TCPIP_RECEIVED , & Dlg::OnTcpipReceive ) 
+	ON_MESSAGE( WM_TCPIP_CLOSED   , & Dlg::OnSocketClose   )
 END_MESSAGE_MAP()
 ```
 
