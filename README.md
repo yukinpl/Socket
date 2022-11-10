@@ -18,7 +18,6 @@ if( !AfxSocketInit() )
 
 __Dlg.cpp__
 ```cpp
-```cpp
 BEGIN_MESSAGE_MAP( Dlg , CDialogEx )
 	ON_MESSAGE( WM_TCPIP_RECEIVED , & Dlg::OnTcpipReceive ) 
 	ON_MESSAGE( WM_TCPIP_CLOSED   , & Dlg::OnSocketClose   )
@@ -44,7 +43,6 @@ LRESULT Dlg::OnSocketClose( WPARAM uniqueId , LPARAM socket )
 ```cpp
 if( FALSE == m_socket.Connect( ipStr , port ) )
 {
-    //Log( _T( "Fail to connect on " + ipStr + ":" + portStr ) , true ) ;
     return ;
 }
 ```
