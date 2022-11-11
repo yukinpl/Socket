@@ -3,14 +3,44 @@
 
 #include <exception>
 
+
 Socket::Socket()
-	: isConnected( false ) , isCreated( false ) 
+	: isConnected( false ) , isCreated( false ) , type( Type::Client )
 {
 	//CSocket::CSocket() ;
 }
 
 
-bool Socket::Create( HWND const & hwnd , int32_t const & uniqueId )
+bool Socket::CreateServer( HWND const & hwnd , int32_t const & port , int32_t const & uniqueId )
+{
+	try
+	{
+		isCreated =
+			( FALSE == CSocket::Create( port , SOCK_STREAM , nullptr ) ) ? false : true ;
+	}
+	catch( std::exception )
+	{
+		return isCreated ;
+	}
+
+	this->hwnd     = hwnd ;
+	this->uniqueId = uniqueId ;
+	this->type     = Type::Server ;
+
+	try
+	{
+		isListened = ( FALSE == CSocket::Listen() ) ? false : true ;
+	}
+	catch( std::exception )
+	{
+		return isListened ;
+	}
+
+	return isListened ;
+}
+
+
+bool Socket::CreateClient( HWND const & hwnd , int32_t const & uniqueId )
 {
 	try
 	{
@@ -22,19 +52,22 @@ bool Socket::Create( HWND const & hwnd , int32_t const & uniqueId )
 		return isCreated ;
 	}
 
-	this->hwnd = hwnd ;
+	this->hwnd     = hwnd ;
 	this->uniqueId = uniqueId ;
+	this->type     = Type::Client ;
 
 	return isCreated ;
 }
 
 
-bool Socket::Connect( CString const & ipStr , int32_t const & _port )
+bool Socket::Connect( CString const & ipStr , int32_t const & port )
 {
-	isConnected = ( FALSE == CSocket::Connect( ipStr , _port ) ) ? false : true ;
+	if( Type::Server == type )
+	{
+		return false ;
+	}
 
-	ip   = std::string( CW2A( ipStr ) ) ;
-	port = _port ;
+	isConnected = ( FALSE == CSocket::Connect( ipStr , port ) ) ? false : true ;
 
 	return FALSE == isConnected ? false : true ;
 }
@@ -67,6 +100,12 @@ void Socket::Close()
 	{
 		isConnected = false ;
 		isCreated   = false ;
+
+		CSocket::Close() ;
+	}
+	else if( true == isListened )
+	{
+		isListened = false ;
 
 		CSocket::Close() ;
 	}
@@ -125,4 +164,26 @@ char const * Socket::GetData() const
 int32_t const & Socket::GetUniqueId() const
 {
 	return uniqueId ;
+}
+
+
+void Socket::OnAccept( int32_t errorcode )
+{
+	pSocket = std::make_shared< Socket >() ;
+
+	bool isAccepted = ( FALSE == Accept( * pSocket ) ) ? false : true ;
+
+	CSocket::OnAccept( errorcode ) ;
+
+	if( true == isAccepted )
+	{
+		pSocket->SetHWND( hwnd ) ;
+		SendMessage( hwnd , WM_TCPIP_ACCEPTED , uniqueId , ( LPARAM ) pSocket.get() ) ;
+	}
+}
+
+
+void Socket::SetHWND( HWND const & _hwnd )
+{
+	hwnd = _hwnd ;
 }
