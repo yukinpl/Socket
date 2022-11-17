@@ -40,6 +40,12 @@ LRESULT Dlg::OnSocketClose( WPARAM uniqueId , LPARAM socket )
 	sock->Close() ;
 ```
     
+
+```cpp
+if( false == m_socket.Send( sendMsg , msgPos ) )
+{
+```
+    
 __Client__
 ```cpp
 m_socket.CreateClient( hwnd ) ;
@@ -55,10 +61,5 @@ if( FALSE == m_socket.Connect( ipStr , port ) )
 __Server___
 ```cpp
 m_socket.CreateServer( hwnd , port ) ;
-```
-
-```cpp
-if( false == m_socket.Send( sendMsg , msgPos ) )
-{
 ```
  
