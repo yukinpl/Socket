@@ -46,6 +46,8 @@ if( false == m_socket.Send( sendMsg , msgPos ) )
 {
 ```
     
+&nbsp;&nbsp;  
+     
 __Client__
 ```cpp
 m_socket.CreateClient( hwnd ) ;
@@ -58,7 +60,9 @@ if( FALSE == m_socket.Connect( ipStr , port ) )
 }
 ```
     
-__Server___
+&nbsp;&nbsp;  
+    
+__Server__
 ```cpp
 m_socket.CreateServer( hwnd , port ) ;
 ```
